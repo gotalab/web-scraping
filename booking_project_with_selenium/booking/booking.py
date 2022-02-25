@@ -1,10 +1,9 @@
 import os
-from typing import Any
+# from typing import Any
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-# from booking import constants
 import booking.booking_filtration as BookingFiltration
 
 
