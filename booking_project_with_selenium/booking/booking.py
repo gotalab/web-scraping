@@ -1,10 +1,13 @@
 import os
-# from typing import Any
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from tabulate import tabulate
 
-import booking.booking_filtration as BookingFiltration
+
+
+from booking.booking_filtration import BookingFiltration
+from booking.booking_report import BookingReport
 
 
 class Booking(webdriver.Chrome):
@@ -16,7 +19,7 @@ class Booking(webdriver.Chrome):
         os.environ['PATH'] += self.driver_path
         self.teardown = teardown
         super(Booking, self).__init__(self.driver_path)
-        self.implicitly_wait(15)
+        self.implicitly_wait(5)
         self.maximize_window()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -105,3 +108,12 @@ class Booking(webdriver.Chrome):
 
     def apply_filtrations(self) -> None:
         filtration = BookingFiltration(driver=self)
+        filtration.apply_star_rating(3, 4, 5)
+        filtration.sort_price_lowest_filter()
+
+    def report_result(self) -> None:
+        hotel_boxes = self.find_element(By.ID, 'search_results_table')
+        report = BookingReport(hotel_boxes)
+        print(tabulate(report.pull_deal_box_attributes(),
+                       headers=["Hotel", "Before Discount", "Price"],
+                       tablefmt='github'))
