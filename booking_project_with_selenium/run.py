@@ -10,7 +10,7 @@ try:
         bot.select_adults(2)
         bot.select_rooms(1)
         bot.click_search()
-        # bot.apply_filtrations()
+        # bot.apply_filtrations() # ommit
         bot.report_result()
 
 except Exception as e:
